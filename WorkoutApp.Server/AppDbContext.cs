@@ -5,18 +5,17 @@ namespace WorkoutApp.Server
 {
     public class AppDbContext: DbContext
     {
-        private IConfiguration config { get; set; }
-
-        public AppDbContext(IConfiguration config)
-        {
-            this.config = config;
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(config.GetConnectionString("WorkoutApp_Dev"));
-        }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>().HasData(
+                new User { Id = 1, Name = "Admin", Email = "admin@jym.com" },
+                new User { Id = 2, Name = "Guest", Email = "guest@jym.com" },
+                new User { Id = 3, Name = "Sample User", Email = "user@jym.com" }
+            );
+        }
     }
 }
