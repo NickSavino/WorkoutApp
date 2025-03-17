@@ -1,18 +1,17 @@
 import React from "react";
-import { FaPlus } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const BottomNav: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-darkBlue text-white flex justify-around py-3 shadow-lg">
-      <button className="text-babyBlue hover:text-white transition">Home</button>
-      <button className="text-babyBlue hover:text-white transition">Profile</button>
-      <button className="text-gray-500 flex flex-col items-center">
-        <FaPlus className="text-lg mb-1" />
-        New Workout
-      </button>
-      <button className="text-babyBlue hover:text-white transition">Stats</button>
-      <button className="text-babyBlue hover:text-white transition">Settings</button>
-    </div>
+    <nav className="bg-[#26455D] text-white flex justify-around items-center p-4">
+      <button onClick={() => navigate("/home")}>Home</button>
+      <button onClick={() => console.log("Profile")}>Profile</button>
+      <button onClick={() => console.log("Workout")}>Workout</button>
+      <button onClick={() => console.log("Stats")}>Stats</button>
+      <button onClick={() => console.log("Settings")}>Settings</button>
+    </nav>
   );
 };
 
