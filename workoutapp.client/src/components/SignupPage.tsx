@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import UserService from "../services/UserService";
 import { useAuth } from "../context/AuthContext";
 
-const LoginPage: React.FC = () => {
+const SignupPage: React.FC = () => {
+    const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -17,12 +18,12 @@ const LoginPage: React.FC = () => {
         }
     }, [user, navigate]);
 
-    const handleLogin = async () => {
+    const handleSignup = async () => {
         try {
-            const user = await UserService.loginUser(username, password);
+            const user = await UserService.registerUser(email, username, password);
             login(user);
         } catch (err) {
-            setError("Invalid Credentials, please try again!");
+            setError("Error registering!");
             throw err;
         }
     };
@@ -43,7 +44,7 @@ const LoginPage: React.FC = () => {
                 </Link>
             </div>
             <div className="w-[90%] lg:w-[40%] bg-white shadow-[0_0px_35px_rgba(38,69,93,0.4)] rounded-xl flex flex-col items-center px-20 py-10">
-                <h1 className="text-3xl font-bold text-darkBlue mb-6 ">Login to Jym</h1>
+                <h1 className="text-3xl font-bold text-darkBlue mb-6 ">Register to Jym</h1>
                 <div className=" w-full h-full pb-8 flex flex-col space-y-6">
                     <div className="flex h-fit space-x-2 border-b-2 border-[#26455D] items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
@@ -51,9 +52,21 @@ const LoginPage: React.FC = () => {
                         </svg>
                         <input
                             type="text"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="Enter your email here"
+                            className="w-full rounded-md text-darkBlue outline-none"
+                        />
+                    </div>
+                    <div className="flex h-fit space-x-2 border-b-2 border-[#26455D]">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                        </svg>
+                        <input
+                            type="text"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            placeholder="Enter your email or username here"
+                            placeholder="Enter your username here"
                             className="w-full rounded-md text-darkBlue outline-none"
                         />
                     </div>
@@ -72,18 +85,17 @@ const LoginPage: React.FC = () => {
                 </div>
                 {error && <p className="text-red-500 pb-2">{error}</p>}
 
-                <button onClick={handleLogin} className="bg-[#26455D] hover:translate-y-0.5 hover:cursor-pointer hover:shadow-lg text-white shadow-md px-6 py-3 rounded-xl transition">
-                    Sign In
+                <button onClick={handleSignup} className="bg-[#26455D] hover:translate-y-0.5 hover:cursor-pointer hover:shadow-lg text-white shadow-md px-6 py-3 rounded-xl transition">
+                    Sign Up
                 </button>
 
-                <p className="my-4 text-darkBlue">or</p>
 
-                <Link to="/signup" className="underline font-bold">
-                    Sign up to Jym here!
+                <Link to="/login" className="underline font-bold mt-6">
+                    Alredy have and account? Login here!
                 </Link>
             </div>
         </div>
     );
 };
 
-export default LoginPage;
+export default SignupPage;
