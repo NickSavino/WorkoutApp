@@ -7,11 +7,11 @@ class UserService {
         this.apiUrl = "https://localhost:7053/api/user";
     }
 
-    async loginUser(nameOrEmail: string) {
+    async loginUser(nameOrEmail: string, password: string) {
         const response = await fetch(`${this.apiUrl}/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(nameOrEmail),
+            body: JSON.stringify({ nameOrEmail, password }),
         });
 
         if (!response.ok) {
@@ -20,6 +20,22 @@ class UserService {
 
         return response.json() as Promise<User>;
     }
+
+    async registerUser(username: string, email: string, password: string) {
+        const response = await fetch(`${this.apiUrl}/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, email, password }),
+        });
+    
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(errorMessage || "Failed to sign up");
+        }
+    
+        return response.json() as Promise<User>;
+    }
+    
 
     async getAllUsers() {
         const response = await fetch(`${this.apiUrl}/get`);
