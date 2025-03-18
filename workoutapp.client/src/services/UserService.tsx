@@ -1,3 +1,5 @@
+import { UserLoginRequestModel } from "../dtos/UserLoginRequestModel";
+import { UserRegisterRequestModel } from "../dtos/UserRegisterRequestModel";
 import { User } from "../models/User";
 
 class UserService {
@@ -7,11 +9,11 @@ class UserService {
         this.apiUrl = "https://localhost:7053/api/user";
     }
 
-    async loginUser(nameOrEmail: string, password: string) {
+    async loginUser(model: UserLoginRequestModel) {
         const response = await fetch(`${this.apiUrl}/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ nameOrEmail, password }),
+            body: JSON.stringify(model),
         });
 
         if (!response.ok) {
@@ -21,11 +23,11 @@ class UserService {
         return response.json() as Promise<User>;
     }
 
-    async registerUser(username: string, email: string, password: string) {
+    async registerUser(model: UserRegisterRequestModel) {
         const response = await fetch(`${this.apiUrl}/register`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, email, password }),
+            body: JSON.stringify(model),
         });
     
         if (!response.ok) {
