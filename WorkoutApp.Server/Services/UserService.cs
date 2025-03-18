@@ -14,14 +14,14 @@ namespace WorkoutApp.Server.Services
 
         public async Task<User?> AuthenticateUser(string nameOrEmail)
         {
-            return await _context.Users.FirstOrDefaultAsync(
+            return await _context.User.FirstOrDefaultAsync(
                 u => u.Name == nameOrEmail || u.Email == nameOrEmail
             );
         }
 
         public async Task<IEnumerable<User>> GetUsers()
         {
-            return await _context.Users.ToListAsync() ?? new List<User>();
+            return await _context.User.ToListAsync() ?? new List<User>();
         }
     }
 }

@@ -15,6 +15,7 @@ namespace WorkoutApp.Server.Controllers
     [ApiController]
     public class UserController : Controller
     {
+
         private readonly UserService userService;
 
         public UserController(UserService userService)
