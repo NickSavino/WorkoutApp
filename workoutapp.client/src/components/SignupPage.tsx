@@ -23,7 +23,11 @@ const SignupPage: React.FC = () => {
             const user = await UserService.registerUser(email, username, password);
             login(user);
         } catch (err) {
-            setError("Error registering!");
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Unknown error registering! Please try again.");
+            }
             throw err;
         }
     };
@@ -91,7 +95,7 @@ const SignupPage: React.FC = () => {
 
 
                 <Link to="/login" className="underline font-bold mt-6">
-                    Alredy have and account? Login here!
+                    Already have and account? Login here!
                 </Link>
             </div>
         </div>

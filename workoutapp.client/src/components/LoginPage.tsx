@@ -22,7 +22,7 @@ const LoginPage: React.FC = () => {
             const user = await UserService.loginUser(username, password);
             login(user);
         } catch (err) {
-            setError("Invalid Credentials, please try again!");
+            setError("Invalid Credentials! Please try again.");
             throw err;
         }
     };
