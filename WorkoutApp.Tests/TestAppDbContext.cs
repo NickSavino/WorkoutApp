@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WorkoutApp.Server;
 using WorkoutApp.Server.Model;
 
-namespace WorkoutApp.Server.WorkoutApp.Tests
+namespace WorkoutApp.Tests
 {
-    public class TestDbContext : AppDbContext
+    public class TestAppDbContext : AppDbContext
     {
-        public TestDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+        public TestAppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
