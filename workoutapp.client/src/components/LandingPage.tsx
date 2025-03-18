@@ -1,6 +1,5 @@
 import React from "react";
 import Navbar from "./Navbar";
-import BottomNav from "./BottomNavbar";
 
 const LandingPage: React.FC = () => {
   const workoutDummyData = {
@@ -26,7 +25,6 @@ const LandingPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <BottomNav />
     </div>
   );
 };
