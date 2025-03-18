@@ -1,10 +1,9 @@
 import React from "react";
 import { useAuth } from "../context/AuthContext";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 const Navbar: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
   return (
@@ -16,18 +15,15 @@ const Navbar: React.FC = () => {
         >
           Jym
         </h2>
-        <nav className="flex items-center space-x-4 pr-2">
-          <button onClick={() => console.log("Profile")} className="hover:cursor-pointer hover:underline">Profile</button>
-          <button onClick={() => console.log("Workout")} className="hover:cursor-pointer hover:underline">Workout</button>
-          {user ? (
-          <button onClick={logout} className="hover:text-red-500 text-white">
+        <nav className="flex items-center space-x-2">
+          <button onClick={() => console.log("Profile")}>Profile</button>
+          <button onClick={() => console.log("Workout")}>Workout</button>
+          <button
+            onClick={logout}
+            className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md transition"
+          >
             Logout
           </button>
-          ):(
-          <Link to="/login" className="hover:underline text-white rounded-md">
-            Login
-          </Link>
-          )}
         </nav>
       </div>
     </header>
