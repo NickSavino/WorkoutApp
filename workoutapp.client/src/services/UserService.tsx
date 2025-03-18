@@ -1,7 +1,7 @@
 import { User } from "../models/User";
 
 class UserService {
-    private apiUrl: string;
+    private readonly apiUrl: string;
 
     constructor() {
         this.apiUrl = "https://localhost:7053/api/user";
