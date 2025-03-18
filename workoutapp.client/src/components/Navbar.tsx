@@ -17,16 +17,26 @@ const Navbar: React.FC = () => {
           Jym
         </h2>
         <nav className="flex items-center space-x-4 pr-2">
-          <button onClick={() => console.log("Profile")} className="hover:cursor-pointer hover:underline">Profile</button>
-          <button onClick={() => console.log("Workout")} className="hover:cursor-pointer hover:underline">Workout</button>
-          {user ? (
-          <button onClick={logout} className="hover:text-red-500 text-white">
-            Logout
+          <button
+            onClick={() => navigate("/profile")}
+            className="hover:cursor-pointer hover:underline"
+          >
+            Profile-(TEST)
           </button>
-          ):(
-          <Link to="/login" className="hover:underline text-white rounded-md">
-            Login
-          </Link>
+          <button
+            onClick={() => console.log("Workout")}
+            className="hover:cursor-pointer hover:underline"
+          >
+            Workout
+          </button>
+          {user ? (
+            <button onClick={logout} className="hover:text-red-500 text-white">
+              Logout
+            </button>
+          ) : (
+            <Link to="/login" className="hover:underline text-white rounded-md">
+              Login
+            </Link>
           )}
         </nav>
       </div>
