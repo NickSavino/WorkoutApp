@@ -2,12 +2,12 @@
 
 namespace WorkoutApp.Server.Model
 {
-    public abstract class BaseEntity
+public abstract class BaseEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime? CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } // Non-nullable
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime? UpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; } // Non-nullable
     }
 }
