@@ -21,10 +21,10 @@ const Navbar: React.FC = () => {
             onClick={() => navigate("/profile")}
             className="hover:cursor-pointer hover:underline"
           >
-            Profile-(TEST)
+            Profile
           </button>
           <button
-            onClick={() => console.log("Workout")}
+            onClick={() => navigate("/workout")}
             className="hover:cursor-pointer hover:underline"
           >
             Workout

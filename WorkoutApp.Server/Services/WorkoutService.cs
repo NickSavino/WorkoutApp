@@ -37,12 +37,17 @@ namespace WorkoutApp.Server.Services
 
             return workouts.Select(w => new WorkoutUpdateModel
             {
+                Id = w.Id,
                 Name = w.Name,
                 UserId = w.UserId,
-                Exercises = w.WorkoutExercises.Select(we => new ExerciseRowModel
+                WorkoutExercises = w.WorkoutExercises.Select(we => new WorkoutExerciseRowModel
                 {
-                    Id = we.ExerciseId,
-                    Notes = null
+                    ExerciseId = we.ExerciseId,
+                    ExerciseName = we.Exercise.Name,
+                    Sets = we.Sets,
+                    Reps = we.Reps,
+                    Weight = we.Weight,
+                    Notes = we.Notes
                 }).ToList()
             });
         }
@@ -53,9 +58,13 @@ namespace WorkoutApp.Server.Services
             {
                 Name = workoutModel.Name,
                 UserId = workoutModel.UserId,
-                WorkoutExercises = workoutModel.Exercises.Select(e => new WorkoutExercise
+                WorkoutExercises = workoutModel.WorkoutExercises.Select(e => new WorkoutExercise
                 {
-                    ExerciseId = e.Id
+                    ExerciseId = e.ExerciseId,
+                    Sets = e.Sets,
+                    Reps = e.Reps,
+                    Weight = e.Weight,
+                    Notes = e.Notes
                 }).ToList()
             };
 
@@ -66,10 +75,55 @@ namespace WorkoutApp.Server.Services
             {
                 Name = newWorkout.Name,
                 UserId = newWorkout.UserId,
-                Exercises = newWorkout.WorkoutExercises.Select(we => new ExerciseRowModel
+                WorkoutExercises = newWorkout.WorkoutExercises.Select(we => new WorkoutExerciseRowModel
                 {
-                    Id = we.ExerciseId,
-                    Notes = null
+                    ExerciseId = we.ExerciseId,
+                    ExerciseName = we.Exercise?.Name ?? "Unknown Exercise",
+                    Sets = we.Sets,
+                    Reps = we.Reps,
+                    Weight = we.Weight,
+                    Notes = we.Notes
+                }).ToList()
+            };
+        }
+
+
+        public async Task<WorkoutUpdateModel?> UpdateWorkout(WorkoutUpdateModel workoutModel)
+        {
+            var workout = await _context.Workout
+                .Include(w => w.WorkoutExercises)
+                .FirstOrDefaultAsync(w => w.Id == workoutModel.Id);
+
+            if (workout == null) return null;
+
+            workout.Name = workoutModel.Name;
+
+            _context.WorkoutExercise.RemoveRange(workout.WorkoutExercises);
+
+            workout.WorkoutExercises = workoutModel.WorkoutExercises.Select(e => new WorkoutExercise
+            {
+                WorkoutId = workoutModel.Id,
+                ExerciseId = e.ExerciseId,
+                Sets = e.Sets,
+                Reps = e.Reps,
+                Weight = e.Weight,
+                Notes = e.Notes
+            }).ToList();
+
+            await _context.SaveChangesAsync();
+
+            return new WorkoutUpdateModel
+            {
+                Name = workout.Name,
+                UserId = workout.UserId,
+                WorkoutExercises = workout.WorkoutExercises.Select(we => new WorkoutExerciseRowModel
+                {
+                    ExerciseId = we.ExerciseId,
+                    ExerciseName = we.Exercise?.Name,
+                    Sets = we.Sets,
+                    Reps = we.Reps,
+                    Weight = we.Weight,
+                    Notes = we.Notes
                 }).ToList()
             };
         }

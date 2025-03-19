@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+../WorkoutApp.Server/appsettings.json
+
+.env
