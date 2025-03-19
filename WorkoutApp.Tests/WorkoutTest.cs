@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using WorkoutApp.Server.Enums;
 using WorkoutApp.Server.Model;
 
 namespace WorkoutApp.Tests
@@ -54,8 +55,10 @@ namespace WorkoutApp.Tests
             _context.SaveChanges();
 
             // Create Exercises with required Type field
-            var exercise1 = new Exercise { Name = "Push-up", Type = "Strength" };
-            var exercise2 = new Exercise { Name = "Squat", Type = "Strength" };
+            var exercise1 = new Exercise { Name = "Push-up", Type = ExerciseType.Chest };
+            var exercise2 = new Exercise { Name = "Squat", Type = ExerciseType.Legs };
+
+
 
             _context.Exercise.AddRange(exercise1, exercise2);
             _context.SaveChanges();
