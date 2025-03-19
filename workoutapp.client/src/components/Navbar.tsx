@@ -24,7 +24,7 @@ const Navbar: React.FC = () => {
             Profile-(TEST)
           </button>
           <button
-            onClick={() => console.log("Workout")}
+            onClick={() => navigate("/workout")}
             className="hover:cursor-pointer hover:underline"
           >
             Workout
