@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
-import BottomNav from "./BottomNavbar";
 import { useAuth } from "../context/AuthContext";
 import { ExerciseRowModel } from "../dtos/exercise/ExerciseRowModel";
 import { WorkoutUpdateModel } from "../dtos/workout/WorkoutUpdateModel";
@@ -33,7 +32,7 @@ const WorkoutPage: React.FC = () => {
   // Load user workouts on component mount
   useEffect(() => {
     fetchWorkoutsAndExercises();
-  }, [user,]);
+  }, [user]);
 
   const muscleGroups = [
     { id: 1, name: "Arms", image: "/src/images/arms.jpg", exercises: exercises.filter(ex => ex.type === ExerciseType.Arms) },
@@ -631,7 +630,6 @@ const updateWorkoutExercise = (exerciseId: number, field: keyof WorkoutExerciseR
           </div>
         )}
       </div>
-      <BottomNav />
     </div>
   );
 };
