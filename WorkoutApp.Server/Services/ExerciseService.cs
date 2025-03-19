@@ -91,5 +91,10 @@ namespace WorkoutApp.Server.Services
             await _context.SaveChangesAsync();
             return true;
         }
+
+        internal async Task<object?> GetExercisesByType(string type)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -58,18 +58,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "WorkoutApp API v1");
-            c.RoutePrefix = "swagger"; // Swagger will be accessible at /swagger
-        });
-    }
+// Configure the HTTP request pipeline.
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "WorkoutApp API v1");
+    c.RoutePrefix = "swagger"; // Swagger will be accessible at /swagger
+});
 
-    using (var scope = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())
     {
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 

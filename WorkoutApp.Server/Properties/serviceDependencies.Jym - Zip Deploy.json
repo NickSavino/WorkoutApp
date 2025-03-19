@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "apis1": {
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ApiManagement/service/WorkoutAppServerapi/apis/WorkoutAppServer",
+      "apiEndpoint": "https://workoutappserverapi2.azure-api.net/",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ApiManagement/service/WorkoutAppServerapi2/apis/WorkoutAppServer",
       "type": "apis.azure"
     }
   }

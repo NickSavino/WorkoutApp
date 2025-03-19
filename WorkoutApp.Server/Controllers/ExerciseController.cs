@@ -33,7 +33,7 @@ namespace WorkoutApp.Server.Controllers
         }
 
         [HttpGet("get/type/{type}")]
-        public async Task<ActionResult<IEnumerable<ExerciseRowModel>>> GetExercisesByType(ExerciseType type)
+        public async Task<ActionResult<IEnumerable<ExerciseRowModel>>> GetExercisesByType([FromRoute] string type)
         {
             return Ok(await _exerciseService.GetExercisesByType(type));
         }
