@@ -3,10 +3,10 @@ import LandingPage from "./components/LandingPage";
 import LoginPage from "./components/LoginPage";
 import SignupPage from "./components/SignupPage";
 import ProfilePage from "./components/ProfilePage";
+import WorkoutPage from "./components/WorkoutPage";
 import { useAuth } from "./context/AuthContext";
 
 function App() {
-
     const { user } = useAuth();
 
     return (
@@ -16,6 +16,7 @@ function App() {
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/home" element={<LandingPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/workout" element={<WorkoutPage />} />
             <Route path="*" element={<Navigate to={user ? "/home" : "/login"} replace />} />
         </Routes>
     );
