@@ -1,7 +1,15 @@
 import React from "react";
 import Navbar from "./Navbar";
+import OpenAI from "openai";
+import { useState } from "react";
 
 const ProfilePage: React.FC = () => {
+  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+  const openai = new OpenAI({
+    apiKey: apiKey,
+    dangerouslyAllowBrowser: true,
+  });
+
   const workoutDummyData = [
     {
       name: "Leg Day",
@@ -58,28 +66,28 @@ const ProfilePage: React.FC = () => {
       ],
     },
     {
-        name: "Chest Day 2",
-        created_at: "2021-10-19T00:00:00.000Z",
-        updated_at: "2022-10-19T00:00:00.000Z",
-        exercise: [
-          {
-            name: "Bench Press",
-            sets: 4,
-            reps: 12,
-            weight: 135,
-            created_at: "2021-10-19T00:00:00.000Z",
-            updated_at: "2022-10-19T00:00:00.000Z",
-          },
-          {
-            name: "Incline Bench Press",
-            sets: 4,
-            reps: 12,
-            weight: 135,
-            created_at: "2021-10-19T00:00:00.000Z",
-            updated_at: "2022-10-19T00:00:00.000Z",
-          },
-        ],
-      }
+      name: "Chest Day 2",
+      created_at: "2021-10-19T00:00:00.000Z",
+      updated_at: "2022-10-19T00:00:00.000Z",
+      exercise: [
+        {
+          name: "Bench Press",
+          sets: 4,
+          reps: 12,
+          weight: 135,
+          created_at: "2021-10-19T00:00:00.000Z",
+          updated_at: "2022-10-19T00:00:00.000Z",
+        },
+        {
+          name: "Incline Bench Press",
+          sets: 4,
+          reps: 12,
+          weight: 135,
+          created_at: "2021-10-19T00:00:00.000Z",
+          updated_at: "2022-10-19T00:00:00.000Z",
+        },
+      ],
+    },
   ];
 
   const userDummyData = {
@@ -96,6 +104,53 @@ const ProfilePage: React.FC = () => {
     0
   );
   const avgExercisesPerWorkout = (totalExercises / totalWorkouts).toFixed(2);
+
+  const [aiResponse, setAiResponse] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const getBotResponse = async (
+    workout: {
+      name: string;
+      created_at: string;
+      updated_at: string;
+      exercise: {
+        name: string;
+        sets: number;
+        reps: number;
+        weight: number;
+        created_at: string;
+        updated_at: string;
+      }[];
+    },
+    setAiResponse: (response: string) => void,
+    setShowModal: (show: boolean) => void
+  ) => {
+    setLoading(true);
+    const prompt = `This is a workout a user built: ${JSON.stringify(
+      workout
+    )}. Act as a professional trainer and give feedback on whether this workout is good or bad and why. Give response in paragraph form and brief.`;
+
+    try {
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [{ role: "user", content: prompt }],
+      });
+
+      if (response.choices[0].message.content) {
+        setAiResponse(response.choices[0].message.content);
+      } else {
+        setAiResponse("No content received from AI.");
+      }
+      setShowModal(true);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching response:", error);
+      setAiResponse("An error occurred while validating the workout.");
+      setShowModal(true);
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-[#C3E0E5]">
@@ -126,7 +181,9 @@ const ProfilePage: React.FC = () => {
 
         {/* Workout Stats Card */}
         <section className="bg-white shadow rounded-lg p-6 mb-6">
-          <h2 className="text-2xl text-[#26455D] font-bold mb-4">Workout Stats</h2>
+          <h2 className="text-2xl text-[#26455D] font-bold mb-4">
+            Workout Stats
+          </h2>
           <div className="flex flex-col sm:flex-row gap-6">
             <div className="flex-1">
               <p className="font-semibold">Total Workouts</p>
@@ -145,7 +202,9 @@ const ProfilePage: React.FC = () => {
 
         {/* Workouts List */}
         <section className="bg-white shadow rounded-lg p-6">
-          <h2 className="text-2xl text-[#26455D] font-bold mb-4">Your Workouts</h2>
+          <h2 className="text-2xl text-[#26455D] font-bold mb-4">
+            Your Workouts
+          </h2>
           <div className="max-h-96 overflow-y-auto space-y-4">
             {workoutDummyData.map((workout, index) => (
               <div
@@ -166,11 +225,37 @@ const ProfilePage: React.FC = () => {
                     </li>
                   ))}
                 </ul>
+                <button
+                  className="mt-4 bg-[#26455D] text-white px-4 py-2 rounded-lg cursor-pointer"
+                  onClick={() =>
+                    getBotResponse(workout, setAiResponse, setShowModal)
+                  }
+                  disabled={loading}
+                >
+                  <text>{loading ? "Loading..." : "Get AI Validation"}</text>
+                </button>
               </div>
             ))}
           </div>
         </section>
       </main>
+      {/* Modal for AI Response */}
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center p-4 bg-opacity-50 backdrop-blur-md">
+          <div className="bg-[#C3E0E5] p-6 rounded-lg shadow-lg max-w-lg w-full max-h-[80vh] overflow-y-auto">
+            <h2 className="text-xl font-bold mb-2">AI Validation</h2>
+            <div className="bg-white text-gray-800 max-h-[60vh] overflow-y-auto p-2 border border-gray-300 rounded">
+              {aiResponse}
+            </div>
+            <button
+              className="mt-4 bg-[#26455D] text-white px-4 py-2 rounded-lg w-full cursor-pointer"
+              onClick={() => setShowModal(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

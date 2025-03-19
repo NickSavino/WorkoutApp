@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 ../WorkoutApp.Server/appsettings.json
+
+.env
