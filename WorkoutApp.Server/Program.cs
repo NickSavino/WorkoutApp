@@ -21,6 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<UserService>();
     builder.Services.AddScoped<ExerciseService>();
     builder.Services.AddScoped<WorkoutService>();
+    builder.Services.AddScoped<ProfileService>();
 
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
