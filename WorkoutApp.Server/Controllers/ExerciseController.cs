@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WorkoutApp.Server.DTO.Exercise;
+using WorkoutApp.Server.Enums;
 using WorkoutApp.Server.Model;
 using WorkoutApp.Server.Services;
 
@@ -17,9 +19,9 @@ namespace WorkoutApp.Server.Controllers
         }
 
         [HttpGet("get")]
-        public async Task<IEnumerable<Exercise>> GetExercises()
+        public async Task<ActionResult<IEnumerable<ExerciseRowModel>>> GetExercises()
         {
-            return await _exerciseService.GetExercises();
+            return Ok(await _exerciseService.GetExercises());
         }
 
         [HttpGet("get/{id}")]
@@ -30,11 +32,18 @@ namespace WorkoutApp.Server.Controllers
             return Ok(exercise);
         }
 
-        [HttpPost("create")]
-        public async Task<ActionResult<Exercise>> CreateExercise([FromBody] Exercise exercise)
+        [HttpGet("get/type/{type}")]
+        public async Task<ActionResult<IEnumerable<ExerciseRowModel>>> GetExercisesByType(ExerciseType type)
         {
-            var createdExercise = await _exerciseService.CreateExercise(exercise);
-            return CreatedAtAction(nameof(GetExerciseById), new { id = createdExercise.Id }, createdExercise);
+            return Ok(await _exerciseService.GetExercisesByType(type));
+        }
+
+
+        [HttpPost("addOrUpdate")]
+        public async Task<ActionResult<ExerciseUpdateModel>> AddOrUpdateExercise([FromBody] ExerciseUpdateModel exercise)
+        {
+            var result = await _exerciseService.AddOrUpdateExercise(exercise);
+            return Ok(result);
         }
 
         [HttpDelete("delete/{id}")]

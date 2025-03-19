@@ -1,4 +1,8 @@
+import { ExerciseType } from "../../enums/ExerciseType";
+
 export interface ExerciseRowModel {
     id: number;
-    notes?: string;
+    name: string;
+    type: ExerciseType;
+    description?: string;
 }
