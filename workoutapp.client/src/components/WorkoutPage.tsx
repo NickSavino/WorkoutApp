@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import BottomNav from "./BottomNavbar";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 // Sample data for muscle groups with images
@@ -94,7 +94,7 @@ const MOCK_USER = {
   email: "test@example.com"
 };
 
-const API_URL = "/api"; // Update with your actual API base URL
+//const API_URL = "/api"; // Update with your actual API base URL
 
 const WorkoutPage: React.FC = () => {
   // Use the real auth context, but provide a fallback mock user for testing
@@ -110,7 +110,7 @@ const WorkoutPage: React.FC = () => {
   const [selectedRoutineExercises, setSelectedRoutineExercises] = useState<any[]>([]);
   const [editingRoutineId, setEditingRoutineId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   // TEMPORARILY DISABLED: Redirect to login if not authenticated
   // useEffect(() => {
