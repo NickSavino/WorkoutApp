@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WorkoutApp.Server.DTO.Exercise;
+using WorkoutApp.Server.DTO.Workout;
 using WorkoutApp.Server.Model;
 
 namespace WorkoutApp.Server.Services
@@ -25,18 +27,51 @@ namespace WorkoutApp.Server.Services
                 .FirstOrDefaultAsync(w => w.Id == id);
         }
 
-        public async Task<Workout?> GetWorkoutByUserId(int userId)
+        public async Task<IEnumerable<WorkoutUpdateModel>> GetWorkoutsByUserId(int userId)
         {
-            return await _context.Workout
-                    .Include(w => w.WorkoutExercises)
-                    .FirstOrDefaultAsync(w => w.Id == userId);
+            var workouts = await _context.Workout
+                .Where(w => w.UserId == userId)
+                .Include(w => w.WorkoutExercises)
+                .ThenInclude(we => we.Exercise)
+                .ToListAsync();
+
+            return workouts.Select(w => new WorkoutUpdateModel
+            {
+                Name = w.Name,
+                UserId = w.UserId,
+                Exercises = w.WorkoutExercises.Select(we => new ExerciseRowModel
+                {
+                    Id = we.ExerciseId,
+                    Notes = null
+                }).ToList()
+            });
         }
 
-        public async Task<Workout> CreateWorkout(Workout workout)
+        public async Task<WorkoutUpdateModel> CreateWorkout(WorkoutUpdateModel workoutModel)
         {
-            _context.Workout.Add(workout);
+            var newWorkout = new Workout
+            {
+                Name = workoutModel.Name,
+                UserId = workoutModel.UserId,
+                WorkoutExercises = workoutModel.Exercises.Select(e => new WorkoutExercise
+                {
+                    ExerciseId = e.Id
+                }).ToList()
+            };
+
+            _context.Workout.Add(newWorkout);
             await _context.SaveChangesAsync();
-            return workout;
+
+            return new WorkoutUpdateModel
+            {
+                Name = newWorkout.Name,
+                UserId = newWorkout.UserId,
+                Exercises = newWorkout.WorkoutExercises.Select(we => new ExerciseRowModel
+                {
+                    Id = we.ExerciseId,
+                    Notes = null
+                }).ToList()
+            };
         }
 
         public async Task<bool> DeleteWorkout(int id)
