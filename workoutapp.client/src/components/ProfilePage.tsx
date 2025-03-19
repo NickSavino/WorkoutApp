@@ -4,7 +4,7 @@ import OpenAI from "openai";
 import { useState } from "react";
 
 const ProfilePage: React.FC = () => {
-  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+  const apiKey = import.meta.env.VITE_OPENAI_API_KEY ?? "";
   const openai = new OpenAI({
     apiKey: apiKey,
     dangerouslyAllowBrowser: true,
