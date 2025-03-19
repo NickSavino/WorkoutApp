@@ -4,7 +4,6 @@ import LoginPage from "./components/LoginPage";
 import WorkoutPage from "./components/WorkoutPage";
 import SignupPage from "./components/SignupPage";
 import ProfilePage from "./components/ProfilePage";
-import WorkoutPage from "./components/WorkoutPage";
 import { useAuth } from "./context/AuthContext";
 
 function App() {
