@@ -1,35 +1,12 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.EntityFrameworkCore;
-using WorkoutApp.Server;
-using WorkoutApp.Server.Model;
 using System.Linq;
+using WorkoutApp.Server.Model;
 
 namespace WorkoutApp.Tests
 {
     [TestClass]
-    public class UserTests
+    public class UserTest : BaseTest
     {
-        private TestAppDbContext _context;
-
-        [TestInitialize]
-        public void Setup()
-        {
-            var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(databaseName: "TestWorkoutDB")
-                .Options;
-
-            _context = new TestAppDbContext(options);
-
-            _context.Database.EnsureDeleted(); // Reset DB before each test
-            _context.Database.EnsureCreated();
-        }
-
-        [TestCleanup]
-        public void Cleanup()
-        {
-            _context.Dispose();
-        }
-
         [TestMethod]
         public void AddUser_ShouldIncreaseCount()
         {
