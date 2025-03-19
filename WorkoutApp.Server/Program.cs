@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Net;
 using WorkoutApp.Server;
 using WorkoutApp.Server.Services;
 
@@ -18,6 +19,8 @@ var builder = WebApplication.CreateBuilder(args);
 
     // Add services to the container.
     builder.Services.AddScoped<UserService>();
+    builder.Services.AddScoped<ExerciseService>();
+    builder.Services.AddScoped<WorkoutService>();
 
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -31,6 +34,14 @@ var builder = WebApplication.CreateBuilder(args);
             Description = "API documentation for WorkoutApp",
         });
     });
+
+    string machineName = Dns.GetHostName();
+
+    builder.Configuration
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        .AddJsonFile($"appsettings.{machineName}.json", optional: true, reloadOnChange: true)
+        .AddEnvironmentVariables();
 
     // Register DBContext
     builder.Services.AddDbContext<AppDbContext>(options =>
@@ -55,6 +66,13 @@ var builder = WebApplication.CreateBuilder(args);
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "WorkoutApp API v1");
             c.RoutePrefix = "swagger"; // Swagger will be accessible at /swagger
         });
+    }
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        dbContext.Database.Migrate();
     }
 
     app.UseHttpsRedirection();

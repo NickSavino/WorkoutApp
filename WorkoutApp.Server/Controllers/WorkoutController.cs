@@ -4,7 +4,7 @@ using WorkoutApp.Server.Services;
 
 namespace WorkoutApp.Server.Controllers
 {
-    [Route("api/user")]
+    [Route("api/workout")]
     [ApiController]
     public class WorkoutController : ControllerBase
     {

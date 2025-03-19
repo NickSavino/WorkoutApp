@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import UserService from "../services/UserService";
 import { useAuth } from "../context/AuthContext";
+import { UserLoginRequestModel } from "../dtos/UserLoginRequestModel";
 
 const LoginPage: React.FC = () => {
     const [username, setUsername] = useState("");
@@ -19,7 +20,8 @@ const LoginPage: React.FC = () => {
 
     const handleLogin = async () => {
         try {
-            const user = await UserService.loginUser(username, password);
+            const model: UserLoginRequestModel = { nameOrEmail: username, password }
+            const user = await UserService.loginUser(model);
             login(user);
         } catch (err) {
             setError("Invalid Credentials! Please try again.");
