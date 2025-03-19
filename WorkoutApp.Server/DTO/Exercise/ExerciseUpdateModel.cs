@@ -1,8 +1,8 @@
 ﻿using WorkoutApp.Server.Enums;
 
-namespace WorkoutApp.Server.Model
+namespace WorkoutApp.Server.DTO.Exercise
 {
-    public class Exercise : BaseEntity
+    public class ExerciseUpdateModel
     {
         public int Id { get; set; }
 
@@ -11,8 +11,5 @@ namespace WorkoutApp.Server.Model
         public required ExerciseType Type { get; set; }
 
         public string? Description { get; set; }
-
-        // Navigation Property
-        public List<WorkoutExercise> WorkoutExercises { get; set; } = new List<WorkoutExercise>();
     }
 }

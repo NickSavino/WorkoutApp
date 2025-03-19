@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
+using WorkoutApp.Server.Enums;
 using WorkoutApp.Server.Model;
 
 namespace WorkoutApp.Server
@@ -55,11 +56,11 @@ namespace WorkoutApp.Server
             {
                 var exercises = new List<Exercise>
                 {
-                    new() { Name = "Bench Press", Type = "Strength", Measurement = 100f },
-                    new() { Name = "Squat", Type = "Strength", Measurement = 150f },
-                    new() { Name = "Deadlift", Type = "Strength", Measurement = 180f },
-                    new() { Name = "Running", Type = "Cardio", Measurement = 5.0f }
-                };
+                    new() { Name = "Bench Press", Type = ExerciseType.Chest },
+                    new() { Name = "Squat", Type = ExerciseType.Legs},
+                    new() { Name = "Deadlift", Type = ExerciseType.Legs },
+                    new() { Name = "Running", Type = ExerciseType.Cardio }
+                };  
                 dbExercises.AddRange(exercises);
                 context.SaveChanges();
 
