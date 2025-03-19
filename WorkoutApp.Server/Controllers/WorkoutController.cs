@@ -43,7 +43,15 @@ namespace WorkoutApp.Server.Controllers
         public async Task<ActionResult<WorkoutUpdateModel>> CreateWorkout([FromBody] WorkoutUpdateModel workout)
         {
             var createdWorkout = await _workoutService.CreateWorkout(workout);
-            return CreatedAtAction(nameof(GetWorkoutById), createdWorkout);
+            return Ok(createdWorkout);
+        }
+
+        [HttpPut("update")]
+        public async Task<ActionResult<WorkoutUpdateModel>> UpdateWorkout([FromBody] WorkoutUpdateModel workoutModel)
+        {
+            var updatedWorkout = await _workoutService.UpdateWorkout(workoutModel);
+            if (updatedWorkout == null) return NotFound();
+            return Ok(updatedWorkout);
         }
 
         [HttpDelete("delete/{id}")]
