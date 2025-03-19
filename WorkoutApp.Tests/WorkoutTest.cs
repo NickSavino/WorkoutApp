@@ -32,7 +32,7 @@ namespace WorkoutApp.Tests
         [TestMethod]
         public void Workout_ShouldHaveCorrectUserAssociation()
         {
-            var user = new User { Name = "John Doe", Email = "john@example.com" };
+            var user = new User { Name = "John Doe", Email = "john@example.com", PasswordHash = HashPassword("securepassword") };
             _context.User.Add(user);
             _context.SaveChanges();
 
