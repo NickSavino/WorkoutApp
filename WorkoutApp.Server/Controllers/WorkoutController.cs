@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WorkoutApp.Server.DTO.Workout;
 using WorkoutApp.Server.Model;
 using WorkoutApp.Server.Services;
 
@@ -23,18 +24,26 @@ namespace WorkoutApp.Server.Controllers
         }
 
         [HttpGet("get/{id}")]
-        public async Task<ActionResult<Workout>> GetWorkoutById(int id)
+        public async Task<ActionResult<WorkoutUpdateModel>> GetWorkoutById(int id)
         {
             var workout = await _workoutService.GetWorkoutById(id);
             if (workout == null) return NotFound();
             return Ok(workout);
         }
 
+        [HttpGet("get/userid/{userId}")]
+        public async Task<ActionResult<WorkoutUpdateModel>> GetWorkoutByUserId(int userId)
+        {
+            var workout = await _workoutService.GetWorkoutsByUserId(userId);
+            if (workout == null) return NotFound();
+            return Ok(workout);
+        }
+
         [HttpPost("create")]
-        public async Task<ActionResult<Workout>> CreateWorkout([FromBody] Workout workout)
+        public async Task<ActionResult<WorkoutUpdateModel>> CreateWorkout([FromBody] WorkoutUpdateModel workout)
         {
             var createdWorkout = await _workoutService.CreateWorkout(workout);
-            return CreatedAtAction(nameof(GetWorkoutById), new { id = createdWorkout.Id }, createdWorkout);
+            return CreatedAtAction(nameof(GetWorkoutById), createdWorkout);
         }
 
         [HttpDelete("delete/{id}")]
