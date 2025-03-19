@@ -6,9 +6,9 @@ class ExerciseService {
     private apiUrl: string;
 
     constructor() {
-        this.apiUrl = "https://workoutappserverapi.azure-api.net/api/exercise";
+        this.apiUrl = "https://workoutappserverapi2.azure-api.net/api/exercise";
     }
-
+    
     async getAllExercises(): Promise<ExerciseRowModel[]> {
         const response = await fetch(`${this.apiUrl}/get`);
         if (!response.ok) throw new Error("Failed to fetch exercises");
