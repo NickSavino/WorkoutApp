@@ -1,4 +1,4 @@
-import { WorkoutUpdateModel } from "../dtos/workout/workout";
+import { WorkoutUpdateModel } from "../dtos/workout/WorkoutUpdateModel";
 
 class WorkoutService {
     private apiUrl: string;
@@ -38,6 +38,20 @@ class WorkoutService {
             throw new Error("Failed to delete workout");
         }
     }
+
+    async updateWorkout(workout: WorkoutUpdateModel) {
+        const response = await fetch(`${this.apiUrl}/update`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(workout),
+        });
+    
+        if (!response.ok) {
+          throw new Error("Failed to update workout");
+        }
+    
+        return response.json() as Promise<WorkoutUpdateModel>;
+      }
 }
 
 export default new WorkoutService();
