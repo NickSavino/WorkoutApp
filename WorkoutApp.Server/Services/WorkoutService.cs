@@ -25,6 +25,13 @@ namespace WorkoutApp.Server.Services
                 .FirstOrDefaultAsync(w => w.Id == id);
         }
 
+        public async Task<Workout?> GetWorkoutByUserId(int userId)
+        {
+            return await _context.Workout
+                    .Include(w => w.WorkoutExercises)
+                    .FirstOrDefaultAsync(w => w.Id == userId);
+        }
+
         public async Task<Workout> CreateWorkout(Workout workout)
         {
             _context.Workout.Add(workout);

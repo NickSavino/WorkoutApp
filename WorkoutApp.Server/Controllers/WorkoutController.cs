@@ -30,6 +30,14 @@ namespace WorkoutApp.Server.Controllers
             return Ok(workout);
         }
 
+        [HttpGet("get/userid/{userId}")]
+        public async Task<ActionResult<Workout>> GetWorkoutByUserId(int userId)
+        {
+            var workout = await _workoutService.GetWorkoutByUserId(userId);
+            if (workout == null) return NotFound();
+            return Ok(workout);
+        }
+
         [HttpPost("create")]
         public async Task<ActionResult<Workout>> CreateWorkout([FromBody] Workout workout)
         {
