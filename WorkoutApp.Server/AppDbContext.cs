@@ -38,9 +38,9 @@ namespace WorkoutApp.Server
             {
                 var usersToAdd = new List<User>
                 {
-                    new() { Name = "Admin", Email = "admin@jym.com" },
-                    new() { Name = "Guest", Email = "guest@jym.com" },
-                    new() { Name = "Sample User", Email = "user@jym.com" }
+                    new() { Name = "Admin", Email = "admin@jym.com", PasswordHash = HashPassword("Admin") },
+                    new() { Name = "Guest", Email = "guest@jym.com", PasswordHash = HashPassword("Guest") },
+                    new() { Name = "Sample User", Email = "user@jym.com", PasswordHash = HashPassword("123") }
                 };
                 dbUsers.AddRange(usersToAdd);
                 context.SaveChanges();
@@ -148,6 +148,12 @@ namespace WorkoutApp.Server
                 }
                 ((BaseEntity)entity.Entity).UpdatedAt = now;
             }
+        }
+        private static string HashPassword(string password)
+        {
+            using var sha256 = System.Security.Cryptography.SHA256.Create();
+            var bytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            return Convert.ToBase64String(bytes);
         }
     }
 }

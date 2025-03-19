@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import UserService from "../services/UserService";
 import { useAuth } from "../context/AuthContext";
+import { UserRegisterRequestModel } from "../dtos/UserRegisterRequestModel";
 
 const SignupPage: React.FC = () => {
     const [email, setEmail] = useState("");
@@ -20,7 +21,8 @@ const SignupPage: React.FC = () => {
 
     const handleSignup = async () => {
         try {
-            const user = await UserService.registerUser(email, username, password);
+            const model: UserRegisterRequestModel = { email: email, username: username, password: password}
+            const user = await UserService.registerUser(model);
             login(user);
         } catch (err) {
             if (err instanceof Error) {
