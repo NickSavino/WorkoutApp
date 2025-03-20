@@ -46,7 +46,7 @@ var builder = WebApplication.CreateBuilder(args);
 
     // Register DBContext
     builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("WorkoutAppDev")));
+        options.UseSqlServer(builder.Configuration.GetConnectionString("SQLAZURECONNSTR_WorkoutAppDev")));
 
     var app = builder.Build();
 
