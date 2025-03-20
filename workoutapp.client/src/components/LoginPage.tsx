@@ -64,7 +64,7 @@ const LoginPage: React.FC = () => {
             // Use the guest account credentials
             const model: UserLoginRequestModel = { 
                 nameOrEmail: "Guest", 
-                password: "guest@jym.com" 
+                password: "Guest" 
             };
             
             // Login using the service like a normal user
