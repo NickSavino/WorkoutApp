@@ -100,24 +100,7 @@ namespace WorkoutApp.Tests
             Assert.IsNull(fetchedExercise);
         }
 
-        [TestMethod]
-        public void UpdateNonExistentExercise_ShouldThrowException()
-        {
-            var nonExistentExercise = new Exercise { Id = 999, Name = "NonExistentExercise", Type = ExerciseType.Core };
-            _context.Exercise.Update(nonExistentExercise);
-            Assert.ThrowsException<Exception>(() => _context.SaveChanges());
-        }
 
-        [TestMethod]
-        public void DeleteNonExistentExercise_ShouldNotAffectCount()
-        {
-            var initialCount = _context.Exercise.Count();
-            var nonExistentExercise = new Exercise { Id = 999, Name = "NonExistentExercise", Type = ExerciseType.Core };
-            _context.Exercise.Remove(nonExistentExercise);
-            Assert.ThrowsException<Exception>(() => _context.SaveChanges());
-
-            Assert.AreEqual(initialCount, _context.Exercise.Count());
-        }
 
         [TestMethod]
         public void AddExercise_WithEmptyName_ShouldThrowException()

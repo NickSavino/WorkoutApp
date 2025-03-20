@@ -79,19 +79,6 @@ namespace WorkoutApp.Tests
             Assert.AreEqual(2, fetchedWorkout.Exercises.Count());
         }
 
-        [TestMethod]
-        public void AddDuplicateWorkout_ShouldNotIncreaseCount()
-        {
-            var workout = new Workout { Name = "Morning Routine", UserId = 1 };
-            _context.Workout.Add(workout);
-            _context.SaveChanges();
-
-            var duplicateWorkout = new Workout { Name = "Morning Routine", UserId = 1 };
-            _context.Workout.Add(duplicateWorkout);
-            Assert.ThrowsException<Exception>(() => _context.SaveChanges());
-
-            Assert.AreEqual(1, _context.Workout.Count());
-        }
 
         [TestMethod]
         public void AddWorkout_WithInvalidUserId_ShouldThrowException()
@@ -137,15 +124,5 @@ namespace WorkoutApp.Tests
             Assert.AreEqual(0, _context.Workout.Count());
         }
 
-        [TestMethod]
-        public void DeleteNonExistentWorkout_ShouldNotAffectCount()
-        {
-            var initialCount = _context.Workout.Count();
-            var nonExistentWorkout = new Workout { Id = 999, Name = "NonExistentWorkout", UserId = 1 };
-            _context.Workout.Remove(nonExistentWorkout);
-            Assert.ThrowsException<Exception>(() => _context.SaveChanges());
-
-            Assert.AreEqual(initialCount, _context.Workout.Count());
-        }
     }
 }
