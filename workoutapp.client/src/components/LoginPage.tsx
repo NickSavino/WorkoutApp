@@ -147,7 +147,7 @@ const LoginPage: React.FC = () => {
                     </Link>
                 </div>
                 <button onClick={handleGuestLogin} className="w-[40%] md:w-[30%] bg-[#dae2e8] shadow-[0_0px_35px_rgba(38,69,93,0.2)] hover:translate-y-0.5 hover:cursor-pointer px-5 py-5 rounded-xl transition">
-                        Use Jym as a guest user here
+                        Use Jym as a guest
                 </button>
             </div>
         </div>
