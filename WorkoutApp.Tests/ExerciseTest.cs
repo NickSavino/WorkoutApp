@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using WorkoutApp.Server.Enums;
 using WorkoutApp.Server.Model;
@@ -74,16 +76,41 @@ namespace WorkoutApp.Tests
         [TestMethod]
         public void AddDuplicateExercise_ShouldNotIncreaseCount()
         {
-            var exercise = new Exercise { Name = "Push-up", Type = ExerciseType.Core };
+            var exercise = new Exercise
+            {
+                Name = "Push-up",
+                Type = ExerciseType.Core,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
             _context.Exercise.Add(exercise);
             _context.SaveChanges();
 
-            var duplicateExercise = new Exercise { Name = "Push-up", Type = ExerciseType.Core };
+            var duplicateExercise = new Exercise
+            {
+                Name = "Push-up",
+                Type = ExerciseType.Core,
+                CreatedAt = exercise.CreatedAt,
+                UpdatedAt = exercise.UpdatedAt // Use the same UpdatedAt value as the first exercise
+            };
             _context.Exercise.Add(duplicateExercise);
-            Assert.ThrowsException<Exception>(() => _context.SaveChanges());
 
+            // The duplicate exercise should cause a constraint violation, such as a unique constraint on the Name column.
+            // Make sure to assert that no changes were saved.
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                // Optionally log or inspect the exception details here if needed
+                Assert.IsTrue(ex.InnerException is SqlException);
+            }
+
+            // Assert that the count remains the same since the duplicate exercise was not added
             Assert.AreEqual(1, _context.Exercise.Count());
         }
+
 
         [TestMethod]
         public void AddExercise_WithInvalidType_ShouldThrowException()

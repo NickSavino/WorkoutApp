@@ -1,7 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using WorkoutApp.Server;
 using WorkoutApp.Server.Model;
+using System;
+using System.IO;
 using System.Text;
 using System.Security.Cryptography;
 
@@ -10,15 +13,29 @@ namespace WorkoutApp.Tests
     public abstract class BaseTest
     {
         protected TestAppDbContext _context;
+        private IConfiguration _configuration;
+
+        public BaseTest()
+        {
+            // Initialize configuration to read appsettings.json
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            _configuration = builder.Build();
+        }
 
         [TestInitialize]
         public void Setup()
         {
+            // Get the connection string from the configuration
+            var connectionString = _configuration.GetConnectionString("WorkoutApp_Test");
+
+            // Configure DbContext to use SQL Server
             var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(databaseName: "TestWorkoutDB")
+                .UseSqlServer(connectionString)
                 .Options;
 
-            _context = new TestAppDbContext(options);
+            _context = new TestAppDbContext(options, _configuration);
             _context.Database.EnsureDeleted(); // Reset DB before each test
             _context.Database.EnsureCreated();
         }
