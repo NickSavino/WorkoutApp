@@ -6,7 +6,7 @@ using WorkoutApp.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-    // Add CORS Policy
+// Add CORS Policy
     builder.Services.AddCors(options =>
     {
         options.AddPolicy("AllowFrontend",
@@ -20,8 +20,8 @@ var builder = WebApplication.CreateBuilder(args);
     });
 
 
-    // Add services to the container.
-    builder.Services.AddScoped<UserService>();
+// Add services to the container.
+builder.Services.AddScoped<UserService>();
     builder.Services.AddScoped<ExerciseService>();
     builder.Services.AddScoped<WorkoutService>();
     builder.Services.AddScoped<ProfileService>();
@@ -55,7 +55,8 @@ var builder = WebApplication.CreateBuilder(args);
 
     app.UseCors("AllowAll");
     app.UseRouting();
-
+    app.UseCors("AllowSpecificOrigin");
+    app.MapControllers();
     app.UseDefaultFiles();
     app.UseStaticFiles();
 
