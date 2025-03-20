@@ -119,6 +119,10 @@ namespace WorkoutApp.Server
                 .HasOne(w => w.User)
                 .WithMany(u => u.Workouts)
                 .HasForeignKey(w => w.UserId);
+
+            modelBuilder.Entity<Exercise>()
+                .HasIndex(e => e.Name)
+                .IsUnique();
         }
 
         public override int SaveChanges()
@@ -156,5 +160,7 @@ namespace WorkoutApp.Server
             var bytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             return Convert.ToBase64String(bytes);
         }
+
+
     }
 }
