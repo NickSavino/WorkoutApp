@@ -4,7 +4,7 @@ class ProfileService {
     private apiUrl: string;
 
     constructor() {
-        this.apiUrl = "https://localhost:7053/api/profile";
+        this.apiUrl = import.meta.env.VITE_API_BASE_URL + "api/profile";
     }
 
     async getProfileStats(userId: number) {

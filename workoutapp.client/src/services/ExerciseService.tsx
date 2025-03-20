@@ -6,7 +6,7 @@ class ExerciseService {
     private apiUrl: string;
 
     constructor() {
-        this.apiUrl = "https://localhost:7053/api/exercise";
+        this.apiUrl = import.meta.env.VITE_API_BASE_URL + "api/exercise";
     }
 
     async getAllExercises(): Promise<ExerciseRowModel[]> {

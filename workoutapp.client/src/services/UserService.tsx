@@ -6,7 +6,7 @@ class UserService {
     private apiUrl: string;
 
     constructor() {
-        this.apiUrl = "https://localhost:7053/api/user";
+        this.apiUrl = import.meta.env.VITE_API_BASE_URL + "/api/user";
     }
 
     async loginUser(model: UserLoginRequestModel) {
