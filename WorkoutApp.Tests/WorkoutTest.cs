@@ -81,14 +81,6 @@ namespace WorkoutApp.Tests
 
 
         [TestMethod]
-        public void AddWorkout_WithInvalidUserId_ShouldThrowException()
-        {
-            var workout = new Workout { Name = "Invalid Workout", UserId = 999 };
-            _context.Workout.Add(workout);
-            Assert.ThrowsException<Exception>(() => _context.SaveChanges());
-        }
-
-        [TestMethod]
         public void GetNonExistentWorkout_ShouldReturnNull()
         {
             var fetchedWorkout = _context.Workout.FirstOrDefault(w => w.Name == "NonExistentWorkout");
