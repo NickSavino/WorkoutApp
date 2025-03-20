@@ -7,7 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 const isProduction = process.env.NODE_ENV === "production";
 const target = isProduction
-  ? "https://yourbackend.azurewebsites.net"
+  ? "workoutappapi-e2bhced7b5a3h5dp.canadaeast-01.azurewebsites.net"
   : "https://localhost:7053";
 
 // https://vitejs.dev/config/

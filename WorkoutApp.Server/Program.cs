@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddCors(options =>
     {
         options.AddPolicy("AllowFrontend",
-            builder => builder.WithOrigins("https://localhost:61526", "https://yourfrontend.azurewebsites.net")
+            builder => builder.WithOrigins("https://localhost:61526", "https://workoutappapi-e2bhced7b5a3h5dp.canadaeast-01.azurewebsites.net", "https://blue-glacier-08eb66f0f.6.azurestaticapps.net")
                               .AllowAnyMethod()
                               .AllowAnyHeader()
                               .AllowCredentials());
