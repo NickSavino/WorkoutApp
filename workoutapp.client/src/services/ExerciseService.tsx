@@ -16,17 +16,21 @@ class ExerciseService {
     }
 
     async addOrUpdateExercise(exercise: ExerciseUpdateModel) {
-        const response = await fetch(`${this.apiUrl}/addOrUpdate`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(exercise),
-        });
+            const response = await fetch(`${this.apiUrl}/addOrUpdate`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(exercise),
+            });
 
-        if (!response.ok) {
-            throw new Error("Failed to save exercise");
-        }
-        return response.json();
+            if (!response.ok) {
+                const errorData = await response.json();
+
+                    throw new Error(errorData || "Cannot enter a duplicate or blank exercise name");
+                }
+
+            return await response.json();
     }
+
 
     async deleteExercise(id: number) {
         const response = await fetch(`${this.apiUrl}/delete/${id}`, {
