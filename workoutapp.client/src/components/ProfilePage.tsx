@@ -63,53 +63,66 @@ const ProfilePage: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-[#C3E0E5]">
       <Navbar />
       <main className="p-6 flex-1">
-        {/* User Profile Card */}
-        <section className="bg-white shadow rounded-lg p-6 mb-6">
-          <h2 className="text-2xl text-[#26455D] font-bold mb-4">Profile</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <p className="font-semibold">Username:</p>
-              <p>{user?.name}</p>
-            </div>
-            <div>
-              <p className="font-semibold">Email:</p>
-              <p>{user?.email}</p>
-            </div>
-            <div>
-              <p className="font-semibold">Member Since:</p>
-              <p>{new Date().toLocaleDateString()}</p>
-            </div>
-            <div>
-              <p className="font-semibold">Last Update:</p>
-              <p>{new Date().toLocaleDateString()}</p>
-            </div>
-          </div>
-        </section>
+        {/* Only show profile and stats sections if user is not a guest */}
+        {user?.name !== "Guest" && (
+          <>
+            <section className="bg-white shadow rounded-lg p-6 mb-6">
+              <h2 className="text-2xl text-[#26455D] font-bold mb-4">Profile</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <p className="font-semibold">Username:</p>
+                  <p>{user?.name}</p>
+                </div>
+                <div>
+                  <p className="font-semibold">Email:</p>
+                  <p>{user?.email}</p>
+                </div>
+                <div>
+                  <p className="font-semibold">Member Since:</p>
+                  <p>{new Date().toLocaleDateString()}</p>
+                </div>
+                <div>
+                  <p className="font-semibold">Last Update:</p>
+                  <p>{new Date().toLocaleDateString()}</p>
+                </div>
+              </div>
+            </section>
 
-        {/* Workout Stats Card */}
-        <section className="bg-white shadow rounded-lg p-6 mb-6">
-          <h2 className="text-2xl text-[#26455D] font-bold mb-4">
-            Workout Stats
-          </h2>
-          <div className="flex flex-col sm:flex-row gap-6">
-            <div className="flex-1">
-              <p className="font-semibold">Total Workouts</p>
-              <p className="text-xl">{profileStats.totalWorkouts}</p>
-            </div>
-            <div className="flex-1">
-              <p className="font-semibold">Total Exercises</p>
-              <p className="text-xl">{profileStats.totalExercises}</p>
-            </div>
-            <div className="flex-1">
-              <p className="font-semibold">Total Reps</p>
-              <p className="text-xl">{profileStats.totalReps}</p>
-            </div>
-            <div className="flex-1">
-              <p className="font-semibold">Average Weight per Workout</p>
-              <p className="text-xl">{profileStats.averageWeight.toFixed(2)}</p>
-            </div>
-          </div>
-        </section>
+            {/* Workout Stats Card */}
+            <section className="bg-white shadow rounded-lg p-6 mb-6">
+              <h2 className="text-2xl text-[#26455D] font-bold mb-4">
+                Workout Stats
+              </h2>
+              <div className="flex flex-col sm:flex-row gap-6">
+                <div className="flex-1">
+                  <p className="font-semibold">Total Workouts</p>
+                  <p className="text-xl">{profileStats.totalWorkouts}</p>
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold">Total Exercises</p>
+                  <p className="text-xl">{profileStats.totalExercises}</p>
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold">Total Reps</p>
+                  <p className="text-xl">{profileStats.totalReps}</p>
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold">Average Weight per Workout</p>
+                  <p className="text-xl">{profileStats.averageWeight.toFixed(2)}</p>
+                </div>
+              </div>
+            </section>
+          </>
+        )}
+        
+        {/* Show a message for guest users */}
+        {user?.name === "Guest" && (
+          <section className="bg-white shadow rounded-lg p-6 mb-6">
+            <h2 className="text-2xl text-[#26455D] font-bold mb-4">Guest Mode</h2>
+            <p className="mb-2">You are currently using Jym as a guest.</p>
+            <p>Your workouts will not be saved after you log out.</p>
+          </section>
+        )}
 
         {/* Workouts List */}
         <section className="bg-white shadow rounded-lg p-6">
