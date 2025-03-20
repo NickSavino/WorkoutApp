@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
 using WorkoutApp.Server.Enums;
 using WorkoutApp.Server.Model;
@@ -76,6 +77,75 @@ namespace WorkoutApp.Tests
 
             Assert.IsNotNull(fetchedWorkout);
             Assert.AreEqual(2, fetchedWorkout.Exercises.Count());
+        }
+
+        [TestMethod]
+        public void AddDuplicateWorkout_ShouldNotIncreaseCount()
+        {
+            var workout = new Workout { Name = "Morning Routine", UserId = 1 };
+            _context.Workout.Add(workout);
+            _context.SaveChanges();
+
+            var duplicateWorkout = new Workout { Name = "Morning Routine", UserId = 1 };
+            _context.Workout.Add(duplicateWorkout);
+            Assert.ThrowsException<Exception>(() => _context.SaveChanges());
+
+            Assert.AreEqual(1, _context.Workout.Count());
+        }
+
+        [TestMethod]
+        public void AddWorkout_WithInvalidUserId_ShouldThrowException()
+        {
+            var workout = new Workout { Name = "Invalid Workout", UserId = 999 };
+            _context.Workout.Add(workout);
+            Assert.ThrowsException<Exception>(() => _context.SaveChanges());
+        }
+
+        [TestMethod]
+        public void GetNonExistentWorkout_ShouldReturnNull()
+        {
+            var fetchedWorkout = _context.Workout.FirstOrDefault(w => w.Name == "NonExistentWorkout");
+            Assert.IsNull(fetchedWorkout);
+        }
+
+        [TestMethod]
+        public void UpdateWorkout_ShouldModifyWorkoutDetails()
+        {
+            var workout = new Workout { Name = "Morning Routine", UserId = 1 };
+            _context.Workout.Add(workout);
+            _context.SaveChanges();
+
+            workout.Name = "Evening Routine";
+            _context.Workout.Update(workout);
+            _context.SaveChanges();
+
+            var updatedWorkout = _context.Workout.FirstOrDefault(w => w.Name == "Evening Routine");
+            Assert.IsNotNull(updatedWorkout);
+            Assert.AreEqual("Evening Routine", updatedWorkout.Name);
+        }
+
+        [TestMethod]
+        public void DeleteWorkout_ShouldDecreaseCount()
+        {
+            var workout = new Workout { Name = "Morning Routine", UserId = 1 };
+            _context.Workout.Add(workout);
+            _context.SaveChanges();
+
+            _context.Workout.Remove(workout);
+            _context.SaveChanges();
+
+            Assert.AreEqual(0, _context.Workout.Count());
+        }
+
+        [TestMethod]
+        public void DeleteNonExistentWorkout_ShouldNotAffectCount()
+        {
+            var initialCount = _context.Workout.Count();
+            var nonExistentWorkout = new Workout { Id = 999, Name = "NonExistentWorkout", UserId = 1 };
+            _context.Workout.Remove(nonExistentWorkout);
+            Assert.ThrowsException<Exception>(() => _context.SaveChanges());
+
+            Assert.AreEqual(initialCount, _context.Workout.Count());
         }
     }
 }
