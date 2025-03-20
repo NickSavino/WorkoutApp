@@ -54,8 +54,8 @@ namespace WorkoutApp.Tests
             _context.SaveChanges();
 
             // Create Exercises with required Type field
-            var exercise1 = new Exercise { Name = "Push-up", Type = "Strength" };
-            var exercise2 = new Exercise { Name = "Squat", Type = "Strength" };
+            var exercise1 = new Exercise { Name = "Push-up", Type = Server.Enums.ExerciseType.Arms };
+            var exercise2 = new Exercise { Name = "Squat", Type = Server.Enums.ExerciseType.Legs };
 
             _context.Exercise.AddRange(exercise1, exercise2);
             _context.SaveChanges();

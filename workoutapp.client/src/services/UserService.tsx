@@ -6,7 +6,7 @@ class UserService {
     private apiUrl: string;
 
     constructor() {
-        this.apiUrl = import.meta.env.VITE_API_BASE_URL + "/api/user";
+        this.apiUrl = "https://workoutappapi-e2bhced7b5a3h5dp.canadaeast-01.azurewebsites.net/api/user";
     }
 
     async loginUser(model: UserLoginRequestModel) {
