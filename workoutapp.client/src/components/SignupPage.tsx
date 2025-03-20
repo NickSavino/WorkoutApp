@@ -9,6 +9,9 @@ const SignupPage: React.FC = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [emailError, setEmailError] = useState("");
+    const [usernameError, setUsernameError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
     const navigate = useNavigate();
 
     const { user, login } = useAuth();
@@ -19,7 +22,52 @@ const SignupPage: React.FC = () => {
         }
     }, [user, navigate]);
 
+    const validateEmail = (email: string) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email) {
+            setEmailError("Email is required");
+            return false;
+        } else if (!emailRegex.test(email)) {
+            setEmailError("Please enter a valid email address");
+            return false;
+        }
+        setEmailError("");
+        return true;
+    };
+
+    const validateUsername = (username: string) => {
+        if (!username.trim()) {
+            setUsernameError("Username is required");
+            return false;
+        }
+        setUsernameError("");
+        return true;
+    };
+    
+    const validatePassword = (password: string) => {
+        if (!password) {
+            setPasswordError("Password is required");
+            return false;
+        } else if (password.length < 8) {
+            setPasswordError("Password must be at least 8 characters long");
+            return false;
+        }
+        setPasswordError("");
+        return true;
+    };
+
     const handleSignup = async () => {
+
+        setError("");
+        
+        const isEmailValid = validateEmail(email);
+        const isUsernameValid = validateUsername(username);
+        const isPasswordValid = validatePassword(password);
+        
+        if (!isEmailValid || !isUsernameValid || !isPasswordValid) {
+            return;
+        }
+        
         try {
             const model: UserRegisterRequestModel = { email: email, username: username, password: password}
             const user = await UserService.registerUser(model);
@@ -52,41 +100,61 @@ const SignupPage: React.FC = () => {
             <div className="w-[90%] lg:w-[40%] bg-white shadow-[0_0px_35px_rgba(38,69,93,0.4)] rounded-xl flex flex-col items-center px-20 py-10">
                 <h1 className="text-3xl font-bold text-darkBlue mb-6 ">Register to Jym</h1>
                 <div className=" w-full h-full pb-8 flex flex-col space-y-6">
-                    <div className="flex h-fit space-x-2 border-b-2 border-[#26455D] items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-                        </svg>
-                        <input
-                            type="text"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="Enter your email here"
-                            className="w-full rounded-md text-darkBlue outline-none"
-                        />
+                    <div className="flex flex-col w-full">
+                        <div className="flex h-fit space-x-2 border-b-2 border-[#26455D] items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                            </svg>
+                            <input
+                                type="text"
+                                value={email}
+                                onChange={(e) => {
+                                    setEmail(e.target.value);
+                                    validateEmail(e.target.value);
+                                }}
+                                placeholder="Enter your email here"
+                                className="w-full rounded-md text-darkBlue outline-none"
+                            />
+                        </div>
+                        {emailError && <p className="text-red-500 text-sm mt-1">{emailError}</p>}
                     </div>
-                    <div className="flex h-fit space-x-2 border-b-2 border-[#26455D]">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                        </svg>
-                        <input
-                            type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            placeholder="Enter your username here"
-                            className="w-full rounded-md text-darkBlue outline-none"
-                        />
+                    
+                    <div className="flex flex-col w-full">
+                        <div className="flex h-fit space-x-2 border-b-2 border-[#26455D]">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                            </svg>
+                            <input
+                                type="text"
+                                value={username}
+                                onChange={(e) => {
+                                    setUsername(e.target.value);
+                                    validateUsername(e.target.value);
+                                }}
+                                placeholder="Enter your username here"
+                                className="w-full rounded-md text-darkBlue outline-none"
+                            />
+                        </div>
+                        {usernameError && <p className="text-red-500 text-sm mt-1">{usernameError}</p>}
                     </div>
-                    <div className="flex h-fit space-x-2 border-b-2 border-[#26455D]">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
-                        </svg>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Enter your password here"
-                            className="w-full rounded-md text-darkBlue outline-none"
-                        />
+                    
+                    <div className="flex flex-col w-full">
+                        <div className="flex h-fit space-x-2 border-b-2 border-[#26455D]">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                            </svg>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(e) => {
+                                    setPassword(e.target.value);
+                                    validatePassword(e.target.value);
+                                }}
+                                placeholder="Enter your password here"
+                                className="w-full rounded-md text-darkBlue outline-none"
+                            />
+                        </div>
+                        {passwordError && <p className="text-red-500 text-sm mt-1">{passwordError}</p>}
                     </div>
                 </div>
                 {error && <p className="text-red-500 pb-2">{error}</p>}
@@ -97,7 +165,7 @@ const SignupPage: React.FC = () => {
 
 
                 <Link to="/login" className="underline font-bold mt-6">
-                    Already have and account? Login here!
+                    Already have an account? Login here!
                 </Link>
             </div>
         </div>
