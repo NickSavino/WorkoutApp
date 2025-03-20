@@ -16,7 +16,7 @@ const LandingPage: React.FC = () => {
           const workouts = await WorkoutService.getWorkoutsByUserId(user.id);
           if (workouts.length > 0) {
             console.log("Workouts found");
-            setDisplayedWorkout(workouts[0].name);
+            setDisplayedWorkout(workouts[workouts.length - 1].name);
           } else {
             console.log("No workouts found");
             setDisplayedWorkout(null);
@@ -40,15 +40,26 @@ const LandingPage: React.FC = () => {
       <Navbar />
       <div className="flex-1 flex flex-col justify-center px-8">
         <div className="flex justify-between items-start">
-          <h1 className="text-4xl font-bold text-[#26455D]">Welcome to Jym</h1>
           <div>
-            <p className="text-xl text-[#26455D]">Last Workout:</p>
+            <h1 className="text-4xl font-bold text-[#26455D]">
+              Welcome to Jym
+            </h1>
+            <p className="text-xl text-[#26455D] mt-3 pr-20">
+              Jym is a platform to create, manage, and track stats of your custom built
+              workouts!
+            </p>
+          </div>
+
+          <div>
+            <p className="text-xl text-[#26455D]">Latest Workout</p>
             {loading ? (
               <text className="text-xl text-[#26455D]">Loading...</text>
             ) : displayedWorkout ? (
-              <text className="text-4xl font-bold text-[#26455D]">{displayedWorkout}</text>
+              <text className="text-4xl font-bold text-[#26455D]">
+                {displayedWorkout}
+              </text>
             ) : (
-              <text className="text-xl text-[#26455D]">No workouts found</text>
+              <text className="text-4xl font-bold text-[#26455D]">No Workouts Found!</text>
             )}
           </div>
         </div>
