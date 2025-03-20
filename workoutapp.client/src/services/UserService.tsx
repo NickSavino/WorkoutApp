@@ -6,7 +6,7 @@ class UserService {
     private apiUrl: string;
 
     constructor() {
-        this.apiUrl = "https://workoutappapi-e2bhced7b5a3h5dp.canadaeast-01.azurewebsites.net/api/user";
+        this.apiUrl = "webappapi-a9c4fpcqdtbzb5an.westus-01.azurewebsites.net/api/user";
     }
 
     async loginUser(model: UserLoginRequestModel) {

@@ -4,7 +4,7 @@ class ProfileService {
     private apiUrl: string;
 
     constructor() {
-        this.apiUrl = import.meta.env.VITE_API_BASE_URL + "api/profile";
+        this.apiUrl = "webappapi-a9c4fpcqdtbzb5an.westus-01.azurewebsites.net/api/profile";
     }
 
     async getProfileStats(userId: number) {
