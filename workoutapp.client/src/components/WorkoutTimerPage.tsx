@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import { WorkoutUpdateModel } from "../dtos/workout/WorkoutUpdateModel";
-import { WorkoutExerciseRowModel } from "../dtos/workout/WorkoutExerciseRowModel";
 
 const WorkoutTimerPage: React.FC = () => {
   const navigate = useNavigate();
@@ -15,6 +14,27 @@ const WorkoutTimerPage: React.FC = () => {
   const [isWorkoutComplete, setIsWorkoutComplete] = useState(false);
   const [exerciseResults, setExerciseResults] = useState<{exerciseId: number, time: number}[]>([]);
   const [setsCompleted, setSetsCompleted] = useState<{ [exerciseId: number]: number }>({});
+  
+  const [globalTimer, setGlobalTimer] = useState(0);
+  const [isGlobalTimerRunning, setIsGlobalTimerRunning] = useState(false);
+
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+  
+    if (isGlobalTimerRunning) {
+      interval = setInterval(() => {
+        setGlobalTimer((prev) => prev + 1);
+      }, 1000);
+    } else if (interval) {
+      clearInterval(interval);
+    }
+  
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isGlobalTimerRunning]);
+  
 
   useEffect(() => {
     // Redirect if no workout was passed
@@ -47,8 +67,13 @@ const WorkoutTimerPage: React.FC = () => {
   }, [isTimerRunning]);
 
   const startSet = () => {
+    if (!isGlobalTimerRunning) {
+      setIsGlobalTimerRunning(true);
+    }
+  
     setIsTimerRunning(true);
   };
+  
 
   const completeSet = () => {
     setIsTimerRunning(false);
@@ -88,6 +113,7 @@ const WorkoutTimerPage: React.FC = () => {
 
   const completeWorkout = () => {
     setIsWorkoutComplete(true);
+    setIsGlobalTimerRunning(false);
   };
 
   const formatTime = (seconds: number): string => {
@@ -121,6 +147,11 @@ const WorkoutTimerPage: React.FC = () => {
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-2xl font-bold text-green-600 mb-6">Workout Complete! 🎉</h2>
             
+            <div className="text-center mb-6">
+              <h4 className="text-sm text-gray-600">Total Workout Duration</h4>
+              <div className="text-2xl font-semibold text-[#26455D]">{formatTime(globalTimer)}</div>
+            </div>
+
             <div className="space-y-6">
               <h3 className="text-xl font-semibold text-[#26455D]">Exercise Results:</h3>
               
@@ -175,6 +206,7 @@ const WorkoutTimerPage: React.FC = () => {
           <>
             {/* Exercise selection tabs */}
             <div className="flex overflow-x-auto mb-4 bg-white rounded-t-lg p-2">
+              
               {workout.workoutExercises.map((exercise, index) => {
                 const isActive = index === currentExerciseIndex;
                 const completedAllSets = (setsCompleted[exercise.exerciseId] || 0) >= exercise.sets;
@@ -196,7 +228,12 @@ const WorkoutTimerPage: React.FC = () => {
                 );
               })}
             </div>
-            
+
+            <div className="text-center mb-4">
+              <h4 className="text-sm text-gray-600">Total Workout Time</h4>
+              <div className="text-3xl font-semibold text-[#26455D]">{formatTime(globalTimer)}</div>
+            </div>
+          
             <div className="bg-white rounded-lg shadow-md p-6 mb-6">
               <div className="mb-2 text-sm text-gray-500">
                 Exercise {currentExerciseIndex + 1} of {workout.workoutExercises.length}

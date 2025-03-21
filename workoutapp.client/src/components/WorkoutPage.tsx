@@ -91,6 +91,15 @@ const WorkoutPage: React.FC = () => {
       return;
     }
 
+    const hasInvalidFields = selectedWorkoutExercises.some((exercise) =>
+      exercise.sets <= 0 || exercise.reps <= 0 || exercise.sets === null || exercise.reps === null
+    );
+  
+    if (hasInvalidFields) {
+      alert("Please make sure all exercises have valid sets and reps (greater than 0).");
+      return;
+    }
+
     try {
       const newWorkout: WorkoutUpdateModel = {
         id: editingWorkoutId ?? 0,
@@ -399,9 +408,11 @@ const updateWorkoutExercise = (exerciseId: number, field: keyof WorkoutExerciseR
                                 <input
                                   type="number"
                                   min="1"
-                                  value={exercise.sets}
+                                  value={exercise.sets === 0 ? "" : exercise.sets}
                                   onChange={(e) => updateWorkoutExercise(exercise.exerciseId, "sets", parseInt(e.target.value) || 0)}
-                                  className="w-12 p-1 text-sm border border-gray-300 rounded-md"
+                                  className={`w-12 p-1 text-sm border rounded-md ${
+                                    exercise.sets <= 0 ? "border-red-500" : "border-gray-300"
+                                  }`}
                                 />
                               </div>
 
@@ -411,9 +422,11 @@ const updateWorkoutExercise = (exerciseId: number, field: keyof WorkoutExerciseR
                                 <input
                                   type="number"
                                   min="1"
-                                  value={exercise.reps}
+                                  value={exercise.reps === 0 ? "" : exercise.reps}
                                   onChange={(e) => updateWorkoutExercise(exercise.exerciseId, "reps", parseInt(e.target.value) || 0)}
-                                  className="w-12 p-1 text-sm border border-gray-300 rounded-md"
+                                  className={`w-12 p-1 text-sm border rounded-md ${
+                                    exercise.reps <= 0 ? "border-red-500" : "border-gray-300"
+                                  }`}
                                 />
                               </div>
 
@@ -423,7 +436,7 @@ const updateWorkoutExercise = (exerciseId: number, field: keyof WorkoutExerciseR
                                 <input
                                   type="number"
                                   min="0"
-                                  value={exercise.weight ?? 0}
+                                  value={exercise.weight === 0 ? "" : exercise.weight}
                                   onChange={(e) => updateWorkoutExercise(exercise.exerciseId, "weight", parseFloat(e.target.value) || 0)}
                                   className="w-14 p-1 text-sm border border-gray-300 rounded-md"
                                 />
