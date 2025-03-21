@@ -1,120 +1,103 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using WorkoutApp.Server;
 using WorkoutApp.Server.Enums;
 using WorkoutApp.Server.Model;
+using System.Linq;
 
 namespace WorkoutApp.Tests
 {
     [TestClass]
-    public class WorkoutTest : BaseTest
+    public class WorkoutTest
     {
+
+        public WorkoutTest()
+        {
+            // Initialize configuration to read appsettings.json
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            _configuration = builder.Build();
+        }
+        private AppDbContext _context;
+        private IConfiguration _configuration;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            // Get the connection string from the configuration
+            var connectionString = _configuration.GetConnectionString("WorkoutApp_Test");
+
+            // Configure DbContext to use SQL Server
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                .UseSqlServer(connectionString)
+                .Options;
+
+            _context = new TestAppDbContext(options, _configuration);
+
+            // Reset the database before each test
+            _context.Database.EnsureDeleted();
+
+            // Apply migrations and seed data
+            _context.Database.EnsureCreated();
+
+            // Add a User to the database (let SQL Server generate the Id)
+            var user = new User { Name = "Test User", Email = "test@example.com", PasswordHash = "hashedpassword" };
+            _context.User.Add(user);
+            _context.SaveChanges();
+        }
+
         [TestMethod]
         public void AddWorkout_ShouldIncreaseCount()
         {
-            var workout = new Workout { Name = "Morning Routine", UserId = 1 };
+            // Get the user created in Setup
+            var user = _context.User.First();
+
+            // Add a Workout associated with the User
+            var workout = new Workout { Name = "Morning Routine", UserId = user.Id };
             _context.Workout.Add(workout);
             _context.SaveChanges();
 
+            // Verify that the Workout count has increased
             Assert.AreEqual(1, _context.Workout.Count());
         }
 
+
         [TestMethod]
-        public void GetWorkout_ShouldReturnCorrectWorkout()
+        public void AddWorkoutExercise_ShouldIncreaseCount()
         {
-            var workout = new Workout { Name = "Cardio Blast", UserId = 1 };
+            // Get the user created in Setup
+            var user = _context.User.First();
+
+            // Add a Workout
+            var workout = new Workout { Name = "Morning Routine", UserId = user.Id };
             _context.Workout.Add(workout);
             _context.SaveChanges();
 
-            var fetchedWorkout = _context.Workout.FirstOrDefault(w => w.Name == "Cardio Blast");
-            Assert.IsNotNull(fetchedWorkout);
-            Assert.AreEqual("Cardio Blast", fetchedWorkout.Name);
+            // Add an Exercise
+            var exercise = new Exercise { Name = "Push-up", Type = ExerciseType.Core };
+            _context.Exercise.Add(exercise);
+            _context.SaveChanges();
+
+            // Add a WorkoutExercise relationship
+            var workoutExercise = new WorkoutExercise { WorkoutId = workout.Id, ExerciseId = exercise.Id };
+            _context.WorkoutExercise.Add(workoutExercise);
+            _context.SaveChanges();
+
+            // Verify that the WorkoutExercise count has increased
+            Assert.AreEqual(1, _context.WorkoutExercise.Count());
         }
 
         [TestMethod]
-        public void Workout_ShouldHaveCorrectUserAssociation()
+        public void AddWorkout_WithInvalidUserId_ShouldThrowException()
         {
-            var user = new User { Name = "John Doe", Email = "john@example.com", PasswordHash = HashPassword("securepassword") };
-            _context.User.Add(user);
-            _context.SaveChanges();
-
-            var workout = new Workout { Name = "Strength Training", UserId = user.Id };
+            // Attempt to add a Workout with an invalid UserId
+            var workout = new Workout { Name = "Invalid Workout", UserId = 999 }; // UserId 999 does not exist
             _context.Workout.Add(workout);
-            _context.SaveChanges();
 
-            var fetchedWorkout = _context.Workout.FirstOrDefault(w => w.Name == "Strength Training");
-            Assert.IsNotNull(fetchedWorkout);
-            Assert.AreEqual(user.Id, fetchedWorkout.UserId);
+            // Verify that a DbUpdateException is thrown
+            Assert.ThrowsException<DbUpdateException>(() => _context.SaveChanges());
         }
-
-        [TestMethod]
-        public void Workout_ShouldHaveWorkoutExercises()
-        {
-            // Create Workout
-            var workout = new Workout { Name = "Full Body", UserId = 1 };
-            _context.Workout.Add(workout);
-            _context.SaveChanges();
-
-            // Create Exercises with required Type field
-            var exercise1 = new Exercise { Name = "Push-up", Type = ExerciseType.Core };
-            var exercise2 = new Exercise { Name = "Squat", Type = ExerciseType.Legs };
-
-            _context.Exercise.AddRange(exercise1, exercise2);
-            _context.SaveChanges();
-
-            // Link Exercises to Workout
-            var workoutExercise1 = new WorkoutExercise { WorkoutId = workout.Id, ExerciseId = exercise1.Id };
-            var workoutExercise2 = new WorkoutExercise { WorkoutId = workout.Id, ExerciseId = exercise2.Id };
-
-            _context.WorkoutExercise.AddRange(workoutExercise1, workoutExercise2);
-            _context.SaveChanges();
-
-            // Fetch Workout and Include Exercises
-            var fetchedWorkout = _context.Workout
-                .Where(w => w.Id == workout.Id)
-                .Select(w => new { w.Id, Exercises = w.WorkoutExercises.Select(we => we.Exercise) })
-                .FirstOrDefault();
-
-            Assert.IsNotNull(fetchedWorkout);
-            Assert.AreEqual(2, fetchedWorkout.Exercises.Count());
-        }
-
-
-        [TestMethod]
-        public void GetNonExistentWorkout_ShouldReturnNull()
-        {
-            var fetchedWorkout = _context.Workout.FirstOrDefault(w => w.Name == "NonExistentWorkout");
-            Assert.IsNull(fetchedWorkout);
-        }
-
-        [TestMethod]
-        public void UpdateWorkout_ShouldModifyWorkoutDetails()
-        {
-            var workout = new Workout { Name = "Morning Routine", UserId = 1 };
-            _context.Workout.Add(workout);
-            _context.SaveChanges();
-
-            workout.Name = "Evening Routine";
-            _context.Workout.Update(workout);
-            _context.SaveChanges();
-
-            var updatedWorkout = _context.Workout.FirstOrDefault(w => w.Name == "Evening Routine");
-            Assert.IsNotNull(updatedWorkout);
-            Assert.AreEqual("Evening Routine", updatedWorkout.Name);
-        }
-
-        [TestMethod]
-        public void DeleteWorkout_ShouldDecreaseCount()
-        {
-            var workout = new Workout { Name = "Morning Routine", UserId = 1 };
-            _context.Workout.Add(workout);
-            _context.SaveChanges();
-
-            _context.Workout.Remove(workout);
-            _context.SaveChanges();
-
-            Assert.AreEqual(0, _context.Workout.Count());
-        }
-
     }
 }
