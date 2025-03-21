@@ -8,11 +8,13 @@ import ExerciseService from "../services/ExerciseService";
 import { ExerciseType } from "../enums/ExerciseType";
 import { WorkoutExerciseRowModel } from "../dtos/workout/WorkoutExerciseRowModel";
 import { ExerciseUpdateModel } from "../dtos/exercise/ExerciseUpdateModel";
+import { useNavigate } from "react-router-dom";
 
 
 const WorkoutPage: React.FC = () => {
   const authContext = useAuth();
   const user = authContext.user;
+  const navigate = useNavigate();
   
   const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<number | null>(null);
   const [workouts, setWorkouts] = useState<WorkoutUpdateModel[]>([]);
@@ -238,6 +240,10 @@ const updateWorkoutExercise = (exerciseId: number, field: keyof WorkoutExerciseR
     setExerciseName("");
     setExerciseDescription("");
 };
+
+  const startWorkoutTimer = (workout: WorkoutUpdateModel) => {
+    navigate("/workout/timer", { state: { workout } });
+  };
 
   if (isLoading) {
     return (
@@ -539,6 +545,14 @@ const updateWorkoutExercise = (exerciseId: number, field: keyof WorkoutExerciseR
                         ) : (
                           <p className="text-sm text-gray-500 italic">No exercises found.</p>
                         )}
+                      </div>
+                      <div className="mt-4">
+                        <button 
+                          onClick={() => startWorkoutTimer(workout)}
+                          className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium"
+                        >
+                          Start Workout
+                        </button>
                       </div>
                     </div>
                   ))}
