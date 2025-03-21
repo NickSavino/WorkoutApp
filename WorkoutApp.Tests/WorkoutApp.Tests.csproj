@@ -28,4 +28,13 @@
     <ProjectReference Include="..\WorkoutApp.Server\WorkoutApp.Server.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="appsettings.LAPTOP-FR3RBO5B.test.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings.test.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
