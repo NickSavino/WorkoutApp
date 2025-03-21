@@ -8,6 +8,7 @@ import WorkoutService from "../services/WorkoutService";
 import { WorkoutUpdateModel } from "../dtos/workout/WorkoutUpdateModel";
 import ProfilePageModal from "./ProfilePageModal";
 import ProfilePageWorkoutComponent from "./ProfilePageWorkoutComponent";
+import { Link } from "react-router-dom";
 
 const ProfilePage: React.FC = () => {
   const authContext = useAuth();
@@ -52,6 +53,18 @@ const ProfilePage: React.FC = () => {
   if (!profileStats) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#C3E0E5]">
+        <div className="absolute top-2 left-2">
+            <Link to="/home">
+                <div className="w-fit flex justify-between space-x-4 rounded-xl px-4 py-2 hover:underline hover:bg-[#96B8BF]">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                    </svg>
+                    <p>
+                        Back to home
+                    </p>
+                </div>
+            </Link>
+        </div>
         <p className="text-xl font-medium text-[#26455D]">
           No profile data available.
         </p>
