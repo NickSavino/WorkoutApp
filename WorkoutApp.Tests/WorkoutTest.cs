@@ -1,5 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
+using WorkoutApp.Server.Enums;
 using WorkoutApp.Server.Model;
 
 namespace WorkoutApp.Tests
@@ -54,8 +56,8 @@ namespace WorkoutApp.Tests
             _context.SaveChanges();
 
             // Create Exercises with required Type field
-            var exercise1 = new Exercise { Name = "Push-up", Type = "Strength" };
-            var exercise2 = new Exercise { Name = "Squat", Type = "Strength" };
+            var exercise1 = new Exercise { Name = "Push-up", Type = ExerciseType.Core };
+            var exercise2 = new Exercise { Name = "Squat", Type = ExerciseType.Legs };
 
             _context.Exercise.AddRange(exercise1, exercise2);
             _context.SaveChanges();
@@ -76,5 +78,51 @@ namespace WorkoutApp.Tests
             Assert.IsNotNull(fetchedWorkout);
             Assert.AreEqual(2, fetchedWorkout.Exercises.Count());
         }
+
+
+        [TestMethod]
+        public void AddWorkout_WithInvalidUserId_ShouldThrowException()
+        {
+            var workout = new Workout { Name = "Invalid Workout", UserId = 999 };
+            _context.Workout.Add(workout);
+            Assert.ThrowsException<Exception>(() => _context.SaveChanges());
+        }
+
+        [TestMethod]
+        public void GetNonExistentWorkout_ShouldReturnNull()
+        {
+            var fetchedWorkout = _context.Workout.FirstOrDefault(w => w.Name == "NonExistentWorkout");
+            Assert.IsNull(fetchedWorkout);
+        }
+
+        [TestMethod]
+        public void UpdateWorkout_ShouldModifyWorkoutDetails()
+        {
+            var workout = new Workout { Name = "Morning Routine", UserId = 1 };
+            _context.Workout.Add(workout);
+            _context.SaveChanges();
+
+            workout.Name = "Evening Routine";
+            _context.Workout.Update(workout);
+            _context.SaveChanges();
+
+            var updatedWorkout = _context.Workout.FirstOrDefault(w => w.Name == "Evening Routine");
+            Assert.IsNotNull(updatedWorkout);
+            Assert.AreEqual("Evening Routine", updatedWorkout.Name);
+        }
+
+        [TestMethod]
+        public void DeleteWorkout_ShouldDecreaseCount()
+        {
+            var workout = new Workout { Name = "Morning Routine", UserId = 1 };
+            _context.Workout.Add(workout);
+            _context.SaveChanges();
+
+            _context.Workout.Remove(workout);
+            _context.SaveChanges();
+
+            Assert.AreEqual(0, _context.Workout.Count());
+        }
+
     }
 }
