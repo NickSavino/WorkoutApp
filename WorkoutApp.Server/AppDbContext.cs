@@ -172,12 +172,15 @@ namespace WorkoutApp.Server
                 var workouts = dbWorkouts.ToList();
                 var exercises = dbExercises.ToList();
 
+                var fullBody = workouts.FirstOrDefault(w => w.Name == "Full Body Workout");
+                var benchPress = exercises.FirstOrDefault(e => e.Name == "Bench Press");
+
                 var workoutExercises = new List<WorkoutExercise>
                 {
                     new() { Workout = workouts.First(w => w.Name == "Full Body Workout"), Exercise = exercises.First(e => e.Name == "Bench Press") },
-                    new() { Workout = workouts.First(w => w.Name == "Full Body Workout"), Exercise = exercises.First(e => e.Name == "Squat") },
-                    new() { Workout = workouts.First(w => w.Name == "Leg Day"), Exercise = exercises.First(e => e.Name == "Squat") },
-                    new() { Workout = workouts.First(w => w.Name == "Leg Day"), Exercise = exercises.First(e => e.Name == "Deadlift") }
+                    new() { Workout = workouts.First(w => w.Name == "Full Body Workout"), Exercise = exercises.First(e => e.Name == "Squats") },
+                    new() { Workout = workouts.First(w => w.Name == "Leg Day"), Exercise = exercises.First(e => e.Name == "Squats") },
+                    new() { Workout = workouts.First(w => w.Name == "Leg Day"), Exercise = exercises.First(e => e.Name == "Deadlifts") }
                 };
                 dbWorkoutExercises.AddRange(workoutExercises);
                 context.SaveChanges();
