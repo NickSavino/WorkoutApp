@@ -81,7 +81,7 @@ namespace WorkoutApp.Server
                     new() { Name = "Dips", Type = ExerciseType.Chest },
                     new() { Name = "Svend Press", Type = ExerciseType.Chest },
                     new() { Name = "Landmine Press", Type = ExerciseType.Chest },
-                    // Back
+                    // Back 
                     new() { Name = "Deadlifts", Type = ExerciseType.Back },
                     new() { Name = "Pull-Ups", Type = ExerciseType.Back },
                     new() { Name = "Bent-Over Rows", Type = ExerciseType.Back },
@@ -136,7 +136,6 @@ namespace WorkoutApp.Server
                     new() { Name = "Lateral Raises", Type = ExerciseType.Shoulders },
                     new() { Name = "Front Raises", Type = ExerciseType.Shoulders },
                     new() { Name = "Arnold Press", Type = ExerciseType.Shoulders },
-                    new() { Name = "Face Pulls", Type = ExerciseType.Shoulders },
                     new() { Name = "Upright Rows", Type = ExerciseType.Shoulders },
                     new() { Name = "Cuban Press", Type = ExerciseType.Shoulders },
                     new() { Name = "Reverse Pec Deck", Type = ExerciseType.Shoulders },
