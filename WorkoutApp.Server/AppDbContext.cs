@@ -56,11 +56,6 @@ namespace WorkoutApp.Server
             {
                 var exercises = new List<Exercise>
                 {
-                    new() { Name = "Bench Press", Type = ExerciseType.Chest },
-                    new() { Name = "Squat", Type = ExerciseType.Legs},
-                    new() { Name = "Deadlift", Type = ExerciseType.Legs },
-                    new() { Name = "Running", Type = ExerciseType.Cardio },
-
                     // Arms
                     new() { Name = "Bicep Curls", Type = ExerciseType.Arms },
                     new() { Name = "Tricep Dips", Type = ExerciseType.Arms },
