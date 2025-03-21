@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using WorkoutApp.Server.Model;
 
-namespace WorkoutApp.Tests
+namespace WorkoutApp.Tests.Model
 {
     [TestClass]
     public class UserTest : BaseTest

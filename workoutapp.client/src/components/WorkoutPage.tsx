@@ -199,7 +199,7 @@ const updateWorkoutExercise = (exerciseId: number, field: keyof WorkoutExerciseR
         setExerciseDescription("");
     } catch (error) {
         console.error("Error saving exercise:", error);
-        alert("Failed to save exercise.");
+        alert("Cannot enter a duplicate exercise name");
     }
   };
 
