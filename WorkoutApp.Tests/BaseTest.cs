@@ -7,6 +7,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Security.Cryptography;
+using System.Net;
 
 namespace WorkoutApp.Tests
 {
@@ -17,10 +18,13 @@ namespace WorkoutApp.Tests
 
         public BaseTest()
         {
+            var machineName = Dns.GetHostName();
             // Initialize configuration to read appsettings.json
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                .AddJsonFile("appsettings.test.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{machineName}.json", optional: true, reloadOnChange: true);
+
             _configuration = builder.Build();
         }
 
