@@ -8,7 +8,7 @@ import ExerciseService from "../services/ExerciseService";
 import { ExerciseType } from "../enums/ExerciseType";
 import { WorkoutExerciseRowModel } from "../dtos/workout/WorkoutExerciseRowModel";
 import { ExerciseUpdateModel } from "../dtos/exercise/ExerciseUpdateModel";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const WorkoutPage: React.FC = () => {
@@ -45,25 +45,6 @@ const WorkoutPage: React.FC = () => {
     { id: 6, name: "Core", image: "/src/images/core.jpg", exercises: exercises.filter(ex => ex.type === ExerciseType.Core) },
     { id: 7, name: "Cardio", image: "/src/images/cardio.jpg", exercises: exercises.filter(ex => ex.type === ExerciseType.Cardio) },
   ];
-
-  // Save workouts when they change
-  useEffect(() => {
-    const saveUserWorkouts = async () => {
-      if (isLoading) return;
-      
-      try {
-        // This would call API in the future
-        console.log("Would save workouts for user:", user?.id);
-      } catch (error) {
-        console.error("Error saving workouts:", error);
-      }
-    };
-    
-    // Debounce workout saves to avoid too many API calls
-    const timeoutId = setTimeout(saveUserWorkouts, 500);
-    return () => clearTimeout(timeoutId);
-  }, [workouts, user, isLoading]);
-
 
   const fetchWorkoutsAndExercises = async () => {
     if (!user) return;
@@ -248,6 +229,18 @@ const updateWorkoutExercise = (exerciseId: number, field: keyof WorkoutExerciseR
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#C3E0E5]">
+        <div className="absolute top-2 left-2">
+              <Link to="/home">
+                  <div className="w-fit flex justify-between space-x-4 rounded-xl px-4 py-2 hover:underline hover:bg-[#96B8BF]">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                      </svg>
+                      <p>
+                          Back to home
+                      </p>
+                  </div>
+              </Link>
+          </div>
         <p className="text-xl font-medium text-[#26455D]">Loading your workouts...</p>
       </div>
     );
@@ -256,7 +249,7 @@ const updateWorkoutExercise = (exerciseId: number, field: keyof WorkoutExerciseR
   return (
     <div className="min-h-screen flex flex-col bg-[#C3E0E5]">
       <Navbar />
-      <div className="flex-1 p-4 pb-20">
+      <div className="flex-1 mx-2 md:mx-8 pb-20 ">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-[#26455D]">Exercises</h1>
           <div className="text-gray-600 text-sm">

@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import UserService from "../services/UserService";
 import { useAuth } from "../context/AuthContext";
 import { UserLoginRequestModel } from "../dtos/UserLoginRequestModel";
-import { User } from "../models/User";
 
 const LoginPage: React.FC = () => {
     const [username, setUsername] = useState("");
