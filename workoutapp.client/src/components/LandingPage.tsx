@@ -15,10 +15,8 @@ const LandingPage: React.FC = () => {
         if (user) {
           const workouts = await WorkoutService.getWorkoutsByUserId(user.id);
           if (workouts.length > 0) {
-            console.log("Workouts found");
             setDisplayedWorkout(workouts[workouts.length - 1].name);
           } else {
-            console.log("No workouts found");
             setDisplayedWorkout(null);
           }
         }
@@ -30,7 +28,6 @@ const LandingPage: React.FC = () => {
     };
 
     if (user) {
-      console.log("User found, getting workouts...");
       getWorkouts();
     }
   }, [user]);

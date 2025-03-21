@@ -4,6 +4,7 @@ import LoginPage from "./components/LoginPage";
 import WorkoutPage from "./components/WorkoutPage";
 import SignupPage from "./components/SignupPage";
 import ProfilePage from "./components/ProfilePage";
+import WorkoutTimerPage from "./components/WorkoutTimerPage";
 import { useAuth } from "./context/AuthContext";
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
             <Route path="/home" element={<LandingPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/workout" element={<WorkoutPage />} />
+            <Route path="/workout/timer" element={<WorkoutTimerPage />} />
             <Route path="*" element={<Navigate to={user ? "/home" : "/login"} replace />} />
         </Routes>
     );
