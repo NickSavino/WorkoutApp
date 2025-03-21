@@ -6,7 +6,7 @@ using WorkoutApp.Server.Enums;
 using WorkoutApp.Server.Model;
 using System.Linq;
 
-namespace WorkoutApp.Tests
+namespace WorkoutApp.Tests.Model
 {
     [TestClass]
     public class WorkoutTest

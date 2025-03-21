@@ -5,7 +5,7 @@ using System.Linq;
 using WorkoutApp.Server.Enums;
 using WorkoutApp.Server.Model;
 
-namespace WorkoutApp.Tests
+namespace WorkoutApp.Tests.Model
 {
     [TestClass]
     public class ExerciseTest : BaseTest
